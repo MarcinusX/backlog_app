@@ -23,17 +23,20 @@ class BacklogPage extends StatelessWidget {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
-          return GridView.count(
-            crossAxisCount: 2,
-            children: snapshot.data
-                .map((note) => NoteCard(
-                      note: note,
-                      onLikeTap: () => bloc.likeNote.add(note.id),
-                    ))
-                .toList(),
-            mainAxisSpacing: 4.0,
-            crossAxisSpacing: 4.0,
-            childAspectRatio: 1,
+          return RefreshIndicator(
+            onRefresh: () => bloc.requestNotes(),
+            child: GridView.count(
+              crossAxisCount: 2,
+              children: snapshot.data
+                  .map((note) => NoteCard(
+                        note: note,
+                        onLikeTap: () => bloc.likeNote.add(note.id),
+                      ))
+                  .toList(),
+              mainAxisSpacing: 4.0,
+              crossAxisSpacing: 4.0,
+              childAspectRatio: 1,
+            ),
           );
         },
       ),
@@ -64,7 +67,7 @@ class _BacklogFab extends StatelessWidget {
       fullscreenDialog: true,
     ));
     if (result == true) {
-      listBloc.requestNotes.add(null);
+      listBloc.requestNotesSink.add(null);
     }
     bloc.dispose();
   }
