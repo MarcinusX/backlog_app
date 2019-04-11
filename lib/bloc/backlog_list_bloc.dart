@@ -11,6 +11,7 @@ class BacklogListBloc {
 
   BacklogListBloc() {
     _getNotesSubject.listen((_) => _getNotes());
+    _getNotesSubject.add(null);
   }
 
   Sink<void> get requestNotesSink => _getNotesSubject.sink;
