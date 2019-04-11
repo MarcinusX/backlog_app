@@ -7,7 +7,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'BacklogApp',
       theme: ThemeData(
-        primaryColor: Colors.red,
+        primaryColor: Colors.blue,
       ),
       home: BacklogListPage(),
     );
