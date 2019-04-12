@@ -44,11 +44,17 @@ class _NewNoteFloatingActionButton extends StatelessWidget {
   void _goToNewNotePage(BuildContext context) {
     NewNoteBloc newNoteBloc = NewNoteBloc();
 
-    Navigator.of(context).push(MaterialPageRoute(
+    Navigator.of(context)
+        .push(MaterialPageRoute(
       builder: (context) => NewNotePage(
             bloc: newNoteBloc,
           ),
-    )).then((_) {
+    ))
+        .then((hasAddedNote) {
+      if (hasAddedNote == true) {
+        BacklogListBloc bloc = BlocProvider.of(context).backlogListBloc;
+        bloc.requestNotesSink.add(null);
+      }
       newNoteBloc.dispose();
     });
   }
