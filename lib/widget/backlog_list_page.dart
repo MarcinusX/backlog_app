@@ -1,5 +1,6 @@
 import 'package:backlog_app/bloc/backlog_list_bloc.dart';
 import 'package:backlog_app/bloc/bloc_provider.dart';
+import 'package:backlog_app/bloc/new_note_bloc.dart';
 import 'package:backlog_app/model/note.dart';
 import 'package:backlog_app/widget/new_note_page.dart';
 import 'package:backlog_app/widget/note_card.dart';
@@ -41,8 +42,14 @@ class _NewNoteFloatingActionButton extends StatelessWidget {
   }
 
   void _goToNewNotePage(BuildContext context) {
+    NewNoteBloc newNoteBloc = NewNoteBloc();
+
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => NewNotePage(),
-    ));
+      builder: (context) => NewNotePage(
+            bloc: newNoteBloc,
+          ),
+    )).then((_) {
+      newNoteBloc.dispose();
+    });
   }
 }

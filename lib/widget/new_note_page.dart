@@ -1,6 +1,11 @@
+import 'package:backlog_app/bloc/new_note_bloc.dart';
 import 'package:flutter/material.dart';
 
 class NewNotePage extends StatelessWidget {
+  final NewNoteBloc bloc;
+
+  const NewNotePage({Key key, @required this.bloc}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,6 +22,7 @@ class NewNotePage extends StatelessWidget {
                 labelText: 'Item text',
               ),
               maxLines: 3,
+              onChanged: (s) => bloc.textSink.add(s),
             ),
             SizedBox(height: 16),
             TextField(
@@ -24,11 +30,10 @@ class NewNotePage extends StatelessWidget {
                 filled: true,
                 labelText: 'Author',
               ),
+              onChanged: (s) => bloc.authorSink.add(s),
             ),
             SizedBox(height: 16),
-            _SendButton(
-              onPressed: () => Navigator.of(context).pop(),
-            ),
+            _SendButton(bloc: bloc),
           ],
         ),
       ),
@@ -37,22 +42,32 @@ class NewNotePage extends StatelessWidget {
 }
 
 class _SendButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final NewNoteBloc bloc;
 
-  const _SendButton({Key key, @required this.onPressed}) : super(key: key);
+  const _SendButton({Key key, @required this.bloc}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 40,
-      child: RaisedButton(
-        color: Colors.blue,
-        textColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: Text('SEND'),
-        onPressed: onPressed,
-      ),
-    );
+    return StreamBuilder<bool>(
+        stream: bloc.canSubmit,
+        initialData: false,
+        builder: (context, snapshot) {
+          return SizedBox(
+            width: double.infinity,
+            height: 40,
+            child: RaisedButton(
+              color: Colors.blue,
+              textColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              child: Text('SEND'),
+              onPressed: snapshot.data ? () => _onPressed(context) : null,
+            ),
+          );
+        });
+  }
+
+  void _onPressed(BuildContext context) {
+    Navigator.of(context).pop();
   }
 }
