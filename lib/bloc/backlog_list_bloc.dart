@@ -8,13 +8,17 @@ import 'package:rxdart/rxdart.dart';
 class BacklogListBloc {
   final _notesSubject = BehaviorSubject<List<Note>>();
   final _getNotesSubject = PublishSubject<void>();
+  final _likeSubject = PublishSubject<Note>();
 
   BacklogListBloc() {
     _getNotesSubject.listen((_) => _getNotes());
+    _likeSubject.listen(_likeANote);
     _getNotesSubject.add(null);
   }
 
   Sink<void> get requestNotesSink => _getNotesSubject.sink;
+
+  Sink<Note> get likeNoteSink => _likeSubject.sink;
 
   Observable<List<Note>> get notes => _notesSubject.stream;
 
@@ -30,7 +34,14 @@ class BacklogListBloc {
     }
   }
 
+  Future<void> _likeANote(Note note) async {
+    http.Response response = await http.put('$https$apiDomain/like?id=${note.id}');
+    print(response.body);
+    requestNotesSink.add(null);
+  }
+
   void dispose() {
+    _likeSubject.close();
     _notesSubject.close();
     _getNotesSubject.close();
   }

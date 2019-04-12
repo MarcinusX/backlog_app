@@ -1,3 +1,5 @@
+import 'package:backlog_app/bloc/backlog_list_bloc.dart';
+import 'package:backlog_app/bloc/bloc_provider.dart';
 import 'package:backlog_app/model/note.dart';
 import 'package:flutter/material.dart';
 
@@ -66,7 +68,10 @@ class _NoteCardLikeRow extends StatelessWidget {
                 Icon(Icons.thumb_up),
               ],
             ),
-            onPressed: () {},
+            onPressed: () {
+              BacklogListBloc bloc = BlocProvider.of(context).backlogListBloc;
+              bloc.likeNoteSink.add(note);
+            },
           )
         ],
       ),
