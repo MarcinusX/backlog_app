@@ -22,11 +22,14 @@ class BacklogListPage extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             }
-            return GridView.count(
-              crossAxisCount: 2,
-              children: snapshot.data.map((Note note) {
-                return NoteCard(note: note);
-              }).toList(),
+            return RefreshIndicator(
+              onRefresh: bloc.requestNotes,
+              child: GridView.count(
+                crossAxisCount: 2,
+                children: snapshot.data.map((Note note) {
+                  return NoteCard(note: note);
+                }).toList(),
+              ),
             );
           }),
       floatingActionButton: _MyFloatingActionButton(),

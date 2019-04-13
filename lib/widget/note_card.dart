@@ -37,17 +37,17 @@ class NoteCard extends StatelessWidget {
               ),
             ),
           ),
-          _BottomLikeRow(note: note),
+          BottomLikeRow(note: note),
         ],
       ),
     );
   }
 }
 
-class _BottomLikeRow extends StatelessWidget {
+class BottomLikeRow extends StatelessWidget {
   final Note note;
 
-  const _BottomLikeRow({Key key, @required this.note}) : super(key: key);
+  const BottomLikeRow({Key key, @required this.note}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -23,11 +23,13 @@ class NewNoteBloc {
 
   Observable<RequestState> get requestState => _requestStateSubject.stream;
 
-  Observable<bool> get canSubmit =>
-      Observable.combineLatest2(_textSubject.stream, _authorSubject.stream,
-          (String text, String author) {
-        return text.trim().isNotEmpty && author.trim().isNotEmpty;
-      });
+  Observable<bool> get canSubmit => Observable.combineLatest2(
+        _textSubject.stream,
+        _authorSubject.stream,
+        (String text, String author) {
+          return text.trim().isNotEmpty && author.trim().isNotEmpty;
+        },
+      );
 
   void _addNote() async {
     _requestStateSubject.add(RequestState.processing);

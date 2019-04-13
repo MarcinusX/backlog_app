@@ -12,7 +12,7 @@ class BacklogListBloc {
   final _likeSubject = PublishSubject<Note>();
 
   BacklogListBloc() {
-    _requestSubject.listen((_) => _requestNotes());
+    _requestSubject.listen((_) => requestNotes());
     _likeSubject.listen(_likeNote);
   }
 
@@ -22,7 +22,7 @@ class BacklogListBloc {
 
   Sink<Note> get likeSink => _likeSubject.sink;
 
-  void _requestNotes() async {
+  Future<void> requestNotes() async {
     http.Response response = await http.get('$apiUrl/getItems');
     print(response.body);
     if (response.statusCode == HttpStatus.ok) {

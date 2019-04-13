@@ -21,6 +21,7 @@ dependencies:
     sdk: flutter
   rxdart: ^0.21.0
   http: ^0.12.0
+  mockito: any
 
 dev_dependencies:
   flutter_test:
