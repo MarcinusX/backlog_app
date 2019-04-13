@@ -8,6 +8,7 @@ class NewNoteBloc {
   final _textSubject = BehaviorSubject<String>();
   final _authorSubject = BehaviorSubject<String>();
   final _submitSubject = PublishSubject<void>();
+  final _requestStateSubject = PublishSubject<RequestState>();
 
   NewNoteBloc() {
     _submitSubject.listen((_) => _addNote());
@@ -18,6 +19,8 @@ class NewNoteBloc {
   Sink<String> get authorSink => _authorSubject.sink;
 
   Sink<void> get submitSink => _submitSubject.sink;
+
+  Observable<RequestState> get requestState => _requestStateSubject.stream;
 
   Observable<bool> get canSubmit =>
       Observable.combineLatest2(_textSubject.stream, _authorSubject.stream,
@@ -38,11 +41,15 @@ class NewNoteBloc {
       headers: headers,
     );
     print(response.statusCode);
+    print(response.body);
   }
 
   void dispose() {
+    _requestStateSubject.close();
     _textSubject.close();
     _submitSubject.close();
     _authorSubject.close();
   }
 }
+
+enum RequestState { idle, processing, error, success }
