@@ -1,3 +1,4 @@
+import 'package:backlog_app/bloc/bloc_provider.dart';
 import 'package:backlog_app/model/note.dart';
 import 'package:flutter/material.dart';
 
@@ -70,7 +71,9 @@ class _BottomLikeRow extends StatelessWidget {
                 Text('LIKE!'),
               ],
             ),
-            onPressed: (){},
+            onPressed: (){
+              BlocProvider.of(context).backlogListBloc.likeSink.add(note);
+            },
           )
         ],
       ),

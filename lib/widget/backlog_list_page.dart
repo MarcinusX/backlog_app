@@ -49,5 +49,6 @@ class _MyFloatingActionButton extends StatelessWidget {
       builder: (context) => NewNotePage(bloc: newNoteBloc),
     ));
     newNoteBloc.dispose();
+    BlocProvider.of(context).backlogListBloc.requestNotesSink.add(null);
   }
 }
