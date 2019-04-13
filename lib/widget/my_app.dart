@@ -16,6 +16,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     backlogListBloc = BacklogListBloc();
+    backlogListBloc.requestNotesSink.add(null);
   }
 
 

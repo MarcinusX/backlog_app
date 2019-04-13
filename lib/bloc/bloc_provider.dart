@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class BlocProvider extends InheritedWidget {
   final BacklogListBloc backlogListBloc;
 
-  const BlocProvider({
+  BlocProvider({
     Key key,
     @required this.backlogListBloc,
     @required Widget child,
