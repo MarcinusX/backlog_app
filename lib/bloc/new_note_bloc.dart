@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:backlog_app/constants.dart';
 import 'package:http/http.dart' as http;
@@ -29,6 +30,7 @@ class NewNoteBloc {
       });
 
   void _addNote() async {
+    _requestStateSubject.add(RequestState.processing);
     String body = json.encode({
       'text': _textSubject.value,
       'author': _authorSubject.value,
@@ -42,6 +44,11 @@ class NewNoteBloc {
     );
     print(response.statusCode);
     print(response.body);
+    if (response.statusCode == HttpStatus.ok) {
+      _requestStateSubject.add(RequestState.success);
+    } else {
+      _requestStateSubject.add(RequestState.error);
+    }
   }
 
   void dispose() {

@@ -1,10 +1,19 @@
+import 'dart:async';
+
 import 'package:backlog_app/bloc/new_note_bloc.dart';
 import 'package:flutter/material.dart';
 
-class NewNotePage extends StatelessWidget {
+class NewNotePage extends StatefulWidget {
   final NewNoteBloc bloc;
 
   const NewNotePage({Key key, @required this.bloc}) : super(key: key);
+
+  @override
+  _NewNotePageState createState() => _NewNotePageState();
+}
+
+class _NewNotePageState extends State<NewNotePage> {
+  StreamSubscription subscription;
 
   @override
   Widget build(BuildContext context) {
@@ -12,35 +21,63 @@ class NewNotePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Add note :)'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: <Widget>[
-            TextField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.yellow,
-                labelText: 'Note text',
+      body: StreamBuilder<RequestState>(
+          stream: widget.bloc.requestState,
+          initialData: RequestState.idle,
+          builder: (context, snapshot) {
+            if (snapshot.data == RequestState.processing) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.yellow,
+                      labelText: 'Note text',
+                    ),
+                    maxLines: 4,
+                    onChanged: (text) => widget.bloc.textSink.add(text),
+                  ),
+                  SizedBox(height: 8),
+                  TextField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.yellow,
+                      labelText: 'Author',
+                    ),
+                    onChanged: (author) => widget.bloc.authorSink.add(author),
+                  ),
+                  SizedBox(height: 8),
+                  SendButton(bloc: widget.bloc),
+                ],
               ),
-              maxLines: 4,
-              onChanged: (text) => bloc.textSink.add(text),
-            ),
-            SizedBox(height: 8),
-            TextField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.yellow,
-                labelText: 'Author',
-              ),
-              onChanged: (author) => bloc.authorSink.add(author),
-            ),
-            SizedBox(height: 8),
-            SendButton(bloc: bloc),
-          ],
-        ),
-      ),
+            );
+          }),
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    subscription = widget.bloc.requestState.listen((requestState) {
+      if (requestState == RequestState.success) {
+        Navigator.of(context).pop();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+
 }
 
 class SendButton extends StatelessWidget {
@@ -68,6 +105,5 @@ class SendButton extends StatelessWidget {
 
   _onPressed(BuildContext context) {
     bloc.submitSink.add(null);
-    Navigator.of(context).pop();
   }
 }
