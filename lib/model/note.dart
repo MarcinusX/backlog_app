@@ -8,4 +8,11 @@ class Note {
   final int likes;
 
   Note(this.id, this.text, this.author, this.color, this.likes);
+
+  Note.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        text = json['text'],
+        author = json['author'],
+        color = Color(json['color']),
+        likes = json['likes'];
 }

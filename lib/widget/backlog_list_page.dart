@@ -1,3 +1,4 @@
+import 'package:backlog_app/bloc/bloc_provider.dart';
 import 'package:backlog_app/model/note.dart';
 import 'package:backlog_app/widget/new_note_page.dart';
 import 'package:backlog_app/widget/note_card.dart';
@@ -15,6 +16,8 @@ class BacklogListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider provider = BlocProvider.of(context);
+    print(provider);
     return Scaffold(
       appBar: AppBar(
         title: Text('Backlog App'),
