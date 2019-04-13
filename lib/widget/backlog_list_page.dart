@@ -1,4 +1,5 @@
 import 'package:backlog_app/model/note.dart';
+import 'package:backlog_app/widget/new_note_page.dart';
 import 'package:backlog_app/widget/note_card.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +25,21 @@ class BacklogListPage extends StatelessWidget {
           return NoteCard(note: note);
         }).toList(),
       ),
+      floatingActionButton: _MyFloatingActionButton(),
+    );
+  }
+}
+
+class _MyFloatingActionButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      onPressed: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => NewNotePage(),
+        ));
+      },
     );
   }
 }
